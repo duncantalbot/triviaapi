@@ -30,7 +30,6 @@ class TriviaTestCase(unittest.TestCase):
         pass
 
     # Tests
-
     def test_get_questions_paginated(self):
         res = self.client().get('/questions')
         data = json.loads(res.data)
