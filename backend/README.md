@@ -4,7 +4,7 @@
 
 ### Installing Dependencies
 
-#### Python 3.7
+#### Python 3.8
 
 Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
@@ -66,31 +66,149 @@ One note before you delve into your tasks: for each endpoint you are expected to
 8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
 9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
 
-REVIEW_COMMENT
+## API INFORMATION / ENDPOINTS
+
+#### GET '/categories'
+- Fetches a list of categories in which the keys are the ids and the value is the category string
+- Returns: An object of id: category_string key:value pairs. 
+- Sample:
 ```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
-
-Endpoints
-GET '/categories'
-GET ...
-POST ...
-DELETE ...
-
-GET '/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "success": true
+}
 
 ```
+#### GET `\questions?page=<page_number>` 
+- Fetches a paginated list of questions of all available categories
+- Request params: page:int 
+- Sample: 
+ ``` {
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "current_category": null, 
+  "questions": [
+    {
+      "answer": "Lisbon", 
+      "category": 2, 
+      "difficulty": 1, 
+      "id": 29, 
+      "question": "What is the capital of Portugal?"
+    },
+    {
+      "answer": "Alexander Fleming", 
+      "category": 1, 
+      "difficulty": 3, 
+      "id": 21, 
+      "question": "Who discovered penicillin?"
+    }, 
+  ], 
+  "success": true, 
+  "total_questions": 2
+}
+```
 
+#### DELETE `/questions/<question_id>`
+- Delete an existing questions from the list of available questions
+- Request arguments: question_id:int 
+- Sample: 
+```
+{
+  "deleted": "12", 
+  "success": true
+}
+```
 
-## Testing
+#### POST `/questions`
+- Add a new question to the list of available questions
+- Request body: {question:string, answer:string, difficulty:int, category:string}
+- Sample: 
+```
+{
+  "created": 29, 
+  "success": true
+}
+```
+
+#### POST `/questions/search`
+- Fetches all questions where a substring matches the search term
+- Request body: {searchTerm:string}
+- Sample:
+```
+{
+  "current_category": null, 
+  "questions": [
+    {
+      "answer": "Lisbon", 
+      "category": 2, 
+      "difficulty": 1, 
+      "id": 29, 
+      "question": "What is the capital of Portugal?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 1
+}
+```
+
+#### GET `/categories/<int:category_id>/questions`
+- Fetches a list of questions for the category
+- Request argument: category_id:int
+- Sample:
+```
+{
+  "current_category": 1, 
+  "questions": [
+    {
+      "answer": "Lisbon", 
+      "category": 2, 
+      "difficulty": 1, 
+      "id": 29, 
+      "question": "What is the capital of Portugal?"
+    {
+      "answer": "Alexander Fleming", 
+      "category": 1, 
+      "difficulty": 3, 
+      "id": 21, 
+      "question": "Who discovered penicillin?"
+    }, 
+  ], 
+  "success": true, 
+  "total_questions": 2
+}
+```
+
+#### POST `/quizzes`
+- Fetches one random question within a specified category. No repeats. 
+- Request body: {previous_questions: arr, quiz_category: {id:int, type:string}}
+- Sample: 
+```
+{
+  "question": {
+    "answer": "The Liver", 
+    "category": 1, 
+    "difficulty": 4, 
+    "id": 20, 
+    "question": "What is the heaviest organ in the human body?"
+  }, 
+  "success": true
+}
+```
+
+#### Testing
 To run the tests, run
 ```
 dropdb trivia_test
